@@ -1,4 +1,4 @@
-# Accesor_MongoDB 0.2.0
+# Accesor_MongoDB 0.2.5
 
 A wrapper for Access to connect with ease and flexiblity.
 
@@ -25,6 +25,7 @@ A wrapper for Access to connect with ease and flexiblity.
         	
         	db_options: {
         		native_parser: true,
+				// if this set to true, you will need to compile the native bson module via npm install mongodb --mongodb:native
         	},  
         };
         
@@ -57,6 +58,8 @@ Perform a select query to obtain data, for example:
 			
 			limit: 100,
 			offset: 50,
+
+			sort: { name: 1 },
 			
 			fields: ["name"]
 		};
@@ -75,6 +78,8 @@ Currently, {options} has implements following attributes:
  * limit
  * offset
  * fields
+ * distinct
+ * count_only: true to return only countings
  
 ##### Note
  
