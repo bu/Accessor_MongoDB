@@ -60,17 +60,15 @@ GenericObject.prototype.select = function() {
 	// limit
 	// offset
 	// fields
+	// orderby
+	// disinct
+	// count_only
 	var _mongo_options = {}, _mongo_selector = {};
 
 	// build selector
 	if( options.where && (typeof options.where === "object") ) {
 		if(options.where._id && typeof options.where._id === "string") {
-            try {
-                options.where._id = ObjectID(options.where._id);
-            }
-            catch (err) {
-                return callback(err);
-            }
+			options.where._id = ObjectID(options.where._id);
 		}
 
 		_mongo_selector = options.where;
@@ -92,7 +90,11 @@ GenericObject.prototype.select = function() {
 
 	// offset
 	if( options.offset && parseInt(options.offset) > 0 ) {
-		_mongo_options.skip = options.skip;
+		_mongo_options.skip = options.offset;
+	}
+
+	if( options.sort ) {
+		_mongo_options.sort = options.sort;
 	}
 
 	// start connect to database
@@ -105,20 +107,43 @@ GenericObject.prototype.select = function() {
 			if(err) {
 				return callback(err);
 			}
+			
+			// distinct is not a select command
+			if(options.distinct) {
+				collection.distinct(options.distinct,_mongo_selector, function(err, result) {
+					if(err) {
+						return callback(err);
+					};
 
-			collection.find( _mongo_selector, _mongo_options, function(err, result) {
-				if(err) {
-					return callback(err);
-				}
+					return callback(null, result);
+				});
+			} else {
+			// run this select as normal select command
 
-				result.toArray(function(err, result) {
+				collection.find( _mongo_selector, _mongo_options, function(err, result) {
 					if(err) {
 						return callback(err);
 					}
 
-					callback(null, result);
+					if(options.count_only && options.count_only === true) {
+						result.count(function(err, count) {
+							if(err) {
+								return callback(err);
+							}
+
+							return callback(null, { count: count });
+						});
+					}
+
+					result.toArray(function(err, result) {
+						if(err) {
+							return callback(err);
+						}
+
+						return callback(null, result);
+					});
 				});
-			});
+			}
 		});
 	});
 };
