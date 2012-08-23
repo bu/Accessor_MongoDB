@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/bu/Accessor_MongoDB.png)](http://travis-ci.org/bu/Accessor_MongoDB)
 # Accesor_MongoDB 0.2.5
 
 A wrapper for Access to connect with ease and flexiblity.
