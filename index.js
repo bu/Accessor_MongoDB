@@ -12,6 +12,8 @@ var GenericObject  = function(table_name) {
 	self._collection_name = table_name;
 };
 
+GenericObject.prototype.ObjectID = ObjectID;
+
 //
 // CRUD action
 //
