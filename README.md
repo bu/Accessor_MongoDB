@@ -1,4 +1,4 @@
-# Accesor_MongoDB 0.2.5
+# Accesor_MongoDB 0.2.6
 
 A wrapper for Access to connect with ease and flexiblity.
 
@@ -44,6 +44,10 @@ A wrapper for Access to connect with ease and flexiblity.
 3. After initialization, Accessor will connect to MongoDB server.
 
 ### Methods
+
+#### accessor.ObjectID()
+
+Convert string into MongoDB ObjectID
 
 #### accessor.select( {options}, callback(err, data_fields) );
 
