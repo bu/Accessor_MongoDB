@@ -8,11 +8,64 @@ var database = require("./database"),
 //
 var GenericObject  = function(table_name) {
 	var self = this;
+
+	self._observer = {}; 
+	self._vaildObserveSubject = ["SELECT", "UPDATE", "CREATE", "REMOVE", "INIT"];
 	
 	self._collection_name = table_name;
 };
 
 GenericObject.prototype.ObjectID = ObjectID;
+
+//
+// Observer
+//
+GenericObject.prototype.registerObserver = function(methods, callback) {
+    var self = this;
+
+    if (typeof methods === "undefined" || typeof callback === "undefined") {
+        return false;
+    }
+
+    if(methods.length === 0) {
+        return false;
+    }
+
+    methods.map(function(method) {
+        // skip invaild subject(event)
+        if(self._vaildObserveSubject.indexOf(method) === -1) {
+            return;
+        }
+        
+        if(method === "INIT") {
+            return callback();
+        }
+    
+        if(typeof self._observer[method] === "undefined") {
+            self._observer[method] = [];
+        }
+        
+        self._observer[method].push(callback);
+    }); 
+};  
+
+GenericObject.prototype.notify = function(event) {
+    var self = this;
+
+    if(self._vaildObserveSubject.indexOf(event) === -1) {
+        return;
+    }
+
+    if(typeof self._observer[event] === "undefined" || !(self._observer[event] instanceof Array) ) {
+        return;
+    }
+
+    self._observer[event].map(function(observer) {
+        process.nextTick(function() {
+            observer(event);
+        });
+    });
+};
 
 //
 // CRUD action
@@ -34,6 +87,8 @@ GenericObject.prototype.create = function(dataObject, callback) {
 				if(err) {
 					return callback(err);
 				}
+
+				self.notify("CREATE");
 
 				callback(null, { insertId: result[0]._id });
 			});
@@ -117,6 +172,8 @@ GenericObject.prototype.select = function() {
 						return callback(err);
 					};
 
+					self.notify("SELECT");
+
 					return callback(null, result);
 				});
 			} else {
@@ -133,6 +190,8 @@ GenericObject.prototype.select = function() {
 								return callback(err);
 							}
 
+							self.notify("SELECT");
+
 							return callback(null, { count: count });
 						});
 					}
@@ -141,6 +200,8 @@ GenericObject.prototype.select = function() {
 						if(err) {
 							return callback(err);
 						}
+
+						self.notify("SELECT");
 
 						return callback(null, result);
 					});
@@ -188,6 +249,8 @@ GenericObject.prototype.update = function(options, newDataObject, callback) {
 				if(err) {
 					return callback(err);
 				}
+				
+				self.notify("UPDATE");
 
 				return callback( null, { success: true } );
 			});
@@ -225,6 +288,8 @@ GenericObject.prototype.remove = function(options, callback) {
 				if(err) {
 					return callback(err);
 				}
+
+				self.notify("REMOVE");
 
 				callback(null, { affectedRows: affectDocuments });
 			});
