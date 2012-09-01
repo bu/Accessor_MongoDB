@@ -1,4 +1,4 @@
-# Accesor_MongoDB 0.2.6
+# Accesor_MongoDB 0.3.0
 
 A wrapper for Access to connect with ease and flexiblity.
 
@@ -220,6 +220,20 @@ Remove records filter by options.where
 			
 			return info.affectedRows;
 		});
+
+    // following example will register a function that print out trigger event name
+
+	    var Accessor = require(
+
+		    var Log = Accessor(
+
+			    // methods can be register are SELECT, CREATE, UPDATE, REMOVE, INIT
+				    var register_methods = [
+
+					    Log.registerObserver(
+						        console.log(})
+								    })
+
 
 ### LICENSE
 
