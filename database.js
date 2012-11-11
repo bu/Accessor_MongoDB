@@ -3,12 +3,16 @@ var mongodb = require("mongodb"),
 	path = require("path");
 
 // global variable or settings
-var config = require( path.join(__dirname, "..", "..", "config", "databaseConfig") );
+var config = null;
 
 // local variable
 var mongo_instance = null;
 
 function connectDB(callback) {
+	if(config === null) {
+		config = require( path.join(__dirname, "..", "..", "config", "databaseConfig") );
+	}
+
 	if(!config.port) {
 		config.port = mongodb.Connection.DEFAULT_PORT;
 	}
@@ -30,7 +34,12 @@ function connectDB(callback) {
 		return callback();
 	});
 }
-		
+
+exports.setConfig = function(config_object) {
+	config = config_object;
+
+	return true;
+};
 
 exports.getInstance = function(callback) {
 	function returnInstance() {

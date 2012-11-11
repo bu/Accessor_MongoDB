@@ -1,4 +1,4 @@
-# Accesor_MongoDB 0.3.0
+# Accesor_MongoDB 0.4.0
 
 A wrapper for Access to connect with ease and flexiblity.
 
@@ -30,6 +30,8 @@ A wrapper for Access to connect with ease and flexiblity.
         };
         
         module.exports = databaseConfig;
+
+	or you could inject this via Accessor_MongoDB.setConfig({ config object });
 
 3. Now, Accessor_MongoDB is ready.
 

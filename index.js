@@ -297,5 +297,9 @@ GenericObject.prototype.remove = function(options, callback) {
 	});
 };
 
+GenericObject.setConfig = function(config) {
+	return database.setConfig(config);
+};
+
 // module exporting
 module.exports = GenericObject;
