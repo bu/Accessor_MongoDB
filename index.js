@@ -196,6 +196,10 @@ GenericObject.prototype.select = function() {
 						});
 					}
 
+					if(options.cursor) {
+						return result.each(callback);	
+					}
+
 					result.toArray(function(err, result) {
 						if(err) {
 							return callback(err);
