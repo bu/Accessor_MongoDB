@@ -1,4 +1,4 @@
-# Accesor_MongoDB 0.4.0
+# Accesor_MongoDB 0.5.0
 
 A wrapper for Access to connect with ease and flexiblity.
 
@@ -34,6 +34,8 @@ A wrapper for Access to connect with ease and flexiblity.
 	or you could inject this via Accessor_MongoDB.setConfig({ config object });
 
 3. Now, Accessor_MongoDB is ready.
+
+P.S. If your database need authenticate, please specify username and password in config object
 
 ## Usage
 
