@@ -31,7 +31,21 @@ function connectDB(callback) {
 			mongo_instance = null;
 		});
 
-		return callback();
+		if(!config.username || !config.password) {
+			return callback();
+		}
+
+		database_instance.authenticate(config.username, config.password, function(err, status) {
+			if(err) {
+				return callback(err);
+			}
+
+			if(!status) {
+				return 	callback("Authentication error");
+			}
+
+			return callback();
+		});
 	});
 }
 
@@ -42,7 +56,11 @@ exports.setConfig = function(config_object) {
 };
 
 exports.getInstance = function(callback) {
-	function returnInstance() {
+	function returnInstance(err) {
+		if(err) {
+			return callback(err);
+		}
+
 		if(mongo_instance === null) {
 			return callback(new Error("No database connection."));
 		}
